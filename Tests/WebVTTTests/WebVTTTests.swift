@@ -29,6 +29,16 @@ func testParsingSimpleCaptionFile() throws {
     }
 }
 
+@Test("Parsing WebVTT line terminators", arguments: ["\n", "\r\n", "\r"])
+func parseLineTerminators(_ terminator: String) throws {
+    let lines = [
+        "WEBVTT", "", "00:00.000 --> 00:02.000", "First", "line",
+        "", "00:02.000 --> 00:04.000", "Second", "",
+    ]
+    let result = try WebVTT.parse(lines.joined(separator: terminator))
+    #expect(result.cues.map(\.text) == ["First\nline", "Second"])
+}
+
 @Test("Parsing file with header text")
 func testParsingWithHeaderText() throws {
     let vtt = """

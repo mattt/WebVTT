@@ -1689,7 +1689,9 @@ extension String {
     /// // ["WEBVTT", "", "00:00:05.000 --> 00:00:08.000", "Hello, world!"]
     /// ```
     fileprivate func splitByNewlines() -> [String] {
-        return split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+        return split(omittingEmptySubsequences: false) { character in
+            character == "\n" || character == "\r" || character == "\r\n"
+        }.map(String.init)
     }
 
     /// Trims whitespace characters from both ends of the string.
